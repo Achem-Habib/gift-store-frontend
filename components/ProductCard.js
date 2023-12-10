@@ -1,4 +1,5 @@
 import { apiUrl } from "@/lib/constant";
+import Link from "next/link";
 import {
   MdAddShoppingCart,
   MdFavoriteBorder,
@@ -7,7 +8,15 @@ import {
 } from "react-icons/md";
 
 const ProductCard = ({ product }) => {
-  const { name, image, price, discounted_price } = product;
+  const {
+    category_slug,
+    subcategory_slug,
+    name,
+    slug,
+    image,
+    price,
+    discounted_price,
+  } = product;
 
   const discountPercentage = Math.round(
     (100 * (price - discounted_price)) / price
@@ -16,21 +25,21 @@ const ProductCard = ({ product }) => {
   return (
     <div className="relative mt-10 flex w-full  max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
       {/* Product image */}
-      <a
+      <Link
         className="relative mx-auto  flex h-60 overflow-hidden rounded-xl"
-        href="#"
+        href={`/shop/${category_slug}/${subcategory_slug}/${slug}`}
       >
         <img
           className="object-cover"
           src={image ? `${apiUrl}${image}` : "/no-image.jpg"}
           alt="product image"
         />
-      </a>
+      </Link>
       <div className="mt-4 px-5 pb-5">
         {/* product name */}
-        <a href="#">
+        <Link href={`/shop/${category_slug}/${subcategory_slug}/${slug}`}>
           <h5 className="text-xl tracking-tight text-slate-900">{name}</h5>
-        </a>
+        </Link>
         <div className="mt-2 mb-5 flex flex-col gap-y-1 ">
           {/* product price */}
           <p>

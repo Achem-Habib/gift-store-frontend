@@ -1,59 +1,69 @@
 "use client";
 
-// components
-import CartItem from "./CartItem";
-import OrderSummary from "./OrderSummary";
+import { useCartContext } from "@/context/CartContext";
+import Image from "next/image";
 
-const products = [
-  {
-    id: 1,
-    name: "Throwback Hip Bag",
-    href: "#",
-    color: "Salmon",
-    price: "$90.00",
-    quantity: 1,
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg",
-    imageAlt:
-      "Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.",
-  },
-  {
-    id: 2,
-    name: "Medium Stuff Satchel",
-    href: "#",
-    color: "Blue",
-    price: "$32.00",
-    quantity: 1,
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg",
-    imageAlt:
-      "Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.",
-  },
-  // More products...
-];
+// components
+import CartItem from "@/components/cart/CartItem";
+import OrderSummary from "@/components/cart/OrderSummary";
+import Link from "next/link";
 
 export default function Cart() {
+  const { addItemToCart, deleteItemFromCart, cart } = useCartContext();
+
   return (
-    <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
-      <div className="flex-1 overflow-y-auto py-6 px-4 sm:px-6">
-        <h2 className="text-lg font-medium text-gray-900"> Shopping cart </h2>
-
-        <div className="flex flex-col md:flex-row gap-y-6 gap-x-6">
-          {/* Cart items */}
-          <ul
-            role="list"
-            className="w-full -my-6 mt-4 divide-y divide-gray-200 border-b border-b-gray-200"
-          >
-            {products.map((product) => (
-              <CartItem key={product.id} product={product} />
-            ))}
-          </ul>
-
-          {/* order summary */}
-          <div className="w-full my-auto">
-            <OrderSummary />
-          </div>
+    <div className="flex h-full flex-col ">
+      <div className="flex-1 overflow-y-auto py-6 ">
+        <div className="flex flex-col gap-y-2">
+          <h2 className="text-2xl font-semibold  text-gray-900">
+            Shopping cart
+          </h2>
+          <span className="font-medium text-slate-500">
+            {cart?.cartItems?.length || 0} Item(s) in Cart
+          </span>
         </div>
+
+        {cart?.cartItems?.length > 0 ? (
+          <div className="flex flex-col md:flex-row gap-y-6 gap-x-6">
+            {/* Cart items */}
+            <ul
+              role="list"
+              className="w-full -my-6 mt-4 divide-y divide-gray-200 "
+            >
+              {cart?.cartItems?.length > 0 &&
+                cart?.cartItems.map((product, index) => (
+                  <CartItem key={index} product={product} />
+                ))}
+            </ul>
+
+            {/* order summary */}
+            <div className="w-full my-auto">
+              <OrderSummary />
+            </div>
+          </div>
+        ) : (
+          <div className="flex">
+            <div className="flex flex-col gap-y-6 mx-auto my-auto">
+              <div className="mx-auto">
+                <Image
+                  src="/empty-cart.png"
+                  width={100}
+                  height={80}
+                  alt="empty cart image"
+                />
+              </div>
+              <h2 className="text-lg text-center font-semibold">
+                Your cart is currently empty
+              </h2>
+              <Link
+                href="/shop"
+                className="px-4 py-2 mx-auto max-w-2xs bg-violet-800 text-slate-50 font-medium text-center"
+              >
+                RETURN TO SHOP
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

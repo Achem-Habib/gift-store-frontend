@@ -1,13 +1,21 @@
-import FeaturedProducts from "./FeaturedProducts";
-import ProductCategories from "./ProductCategories";
-import Promotions from "./Promotions";
+import FeaturedProducts from "@/components/storefront/FeaturedProducts";
+import ProductCategories from "@/components/storefront/ProductCategories";
+import Promotions from "@/components/storefront/Promotions";
 
-export default function Home() {
+import { getCategories, getFeaturedProducts } from "@/lib/data/getData";
+
+export default async function Home() {
+  const categories = await getCategories();
+  const featuredProducts = await getFeaturedProducts();
+  console.log(featuredProducts.length);
   return (
     <div className="">
       <Promotions />
-      <ProductCategories />
-      <FeaturedProducts />
+      {categories?.length > 0 && <ProductCategories categories={categories} />}
+
+      {featuredProducts?.length > 0 && (
+        <FeaturedProducts featuredProducts={featuredProducts} />
+      )}
     </div>
   );
 }
